@@ -222,9 +222,10 @@ file1 = usrReqFile(file2compare())
 file2 = todayFileChecker(todayFile() , file2compare())
 
 if (file1 != None) and (file2 != None):
-    print('Compariiing!')
+    # compare(file1,file2)
+    print("Finished comparing")
 else:
     print('NOT Comparing!')
 
 
-# compare(file1,file2)
+

@@ -1,10 +1,14 @@
 from xls2xlsx import XLS2XLSX
 import os
+from os import listdir
+from os.path import isfile, join
 import sys
 import requests
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
 from openpyxl import Workbook
+from datetime import date
+
 
 def convert (file_name):
     
@@ -26,11 +30,6 @@ def xlsx_check (file1, file2):
     return file1, file2
 
     
-
-
-file1 = "propiedades-2021-07-08.xlsx"
-file2 = "propiedades-2021-07-12.xls"
-
 
 def compare (file1, file2):
     file1 , file2 = xlsx_check(file1,file2)
@@ -179,11 +178,53 @@ def compare (file1, file2):
     wbF.save('Actualizacion.xlsx')
 
         
+def file2compare():
+    mypath = os.getcwd()
+
+    propiedades=[]
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    for  f in onlyfiles:
+        files = f.split('-')
+        if (files[0] == 'propiedades'):
+            propiedades.append(f)
+
+    #En caso de que no hayan archivos de propiedades?
+    print('Archivos de propiedades disponibles en esta carpete:\n')
+    print(propiedades)
+    return propiedades
+
+def todayFile():
+    today = date.today()
+    d1 = today.strftime("%d/%m/%Y").split('/')
+    fName = "propiedades-" + d1[2] + '-' + d1[1] + '-'+ d1[0] + '.xls'
+    return fName
+
+def usrReqFile(prop_files):
+    print('Favor de ingresar la fecha de comparación deseada dd/mm/aaaa')
+    today = input()
+    d1 = today.split('/')
+    fName = "propiedades-" + d1[2] + '-' + d1[1] + '-'+ d1[0] + '.xlsx'
+    print(fName)
+    if fName in prop_files:
+        return fName
+    else:
+        print('Esta fecha no tiene un archivo correspondiente')
+
+def todayFileChecker(file,prop_files):
+    
+    if file in prop_files:
+        return file
+
+    else:
+        print('No hay archivo correspondiente para el dia de hoy')
+
+file1 = usrReqFile(file2compare())
+file2 = todayFileChecker(todayFile() , file2compare())
+
+if (file1 != None) and (file2 != None):
+    print('Compariiing!')
+else:
+    print('NOT Comparing!')
 
 
-
-
-
-
-
-compare(file1,file2)
+# compare(file1,file2)
